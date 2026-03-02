@@ -40,11 +40,6 @@ function addItem() {
     clearInputs();
 }
 
-    saveItems();
-    renderItems();
-    clearInputs();
-}
-
 function renderItems() {
     const table = document.getElementById("inventoryTable");
     table.innerHTML = "";
@@ -136,3 +131,4 @@ function updateChart() {
 
 
 document.addEventListener("DOMContentLoaded", renderItems);
+
