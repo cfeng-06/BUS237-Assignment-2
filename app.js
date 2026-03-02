@@ -11,19 +11,34 @@ function addItem() {
     const quantity = parseInt(document.getElementById("itemQuantity").value);
     const price = parseFloat(document.getElementById("itemPrice").value);
 
+    // Validation
     if (!name || isNaN(quantity) || isNaN(price) || quantity <= 0 || price < 0) {
         alert("Please enter valid values. No negatives or invalid numbers allowed.");
         return;
     }
 
-    const existingItem = inventory.find(item => item.name.toLowerCase() === name.toLowerCase());
+    const existingItem = inventory.find(
+        item => item.name.toLowerCase() === name.toLowerCase()
+    );
 
     if (existingItem) {
-        existingItem.quantity = quantity;
-        existingItem.price = price;
+        // If same price → add quantities
+        if (existingItem.price === price) {
+            existingItem.quantity += quantity;
+        } 
+        // If different price → error
+        else {
+            alert("Error: Item already exists with a different price.");
+            return;
+        }
     } else {
         inventory.push({ name, quantity, price });
     }
+
+    saveItems();
+    renderItems();
+    clearInputs();
+}
 
     saveItems();
     renderItems();
@@ -118,5 +133,6 @@ function updateChart() {
         }
     });
 }
+
 
 document.addEventListener("DOMContentLoaded", renderItems);
