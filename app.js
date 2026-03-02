@@ -11,7 +11,6 @@ function addItem() {
     const quantity = parseInt(document.getElementById("itemQuantity").value);
     const price = parseFloat(document.getElementById("itemPrice").value);
 
-    // Validation
     if (!name || isNaN(quantity) || isNaN(price) || quantity <= 0 || price < 0) {
         alert("Please enter valid values. No negatives or invalid numbers allowed.");
         return;
@@ -22,12 +21,9 @@ function addItem() {
     );
 
     if (existingItem) {
-        // If same price → add quantities
         if (existingItem.price === price) {
-            existingItem.quantity += quantity;
-        } 
-        // If different price → error
-        else {
+            existingItem.quantity += quantity; // Merge quantities
+        } else {
             alert("Error: Item already exists with a different price.");
             return;
         }
@@ -52,15 +48,15 @@ function renderItems() {
         totalQty += item.quantity;
         totalVal += lineTotal;
 
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${item.name}</td>
-            <td>${item.quantity}</td>
-            <td>$${item.price.toFixed(2)}</td>
-            <td>$${lineTotal.toFixed(2)}</td>
-            <td><button onclick="deleteItem(${index})" class="danger">Delete</button></td>
+        table.innerHTML += `
+            <tr>
+                <td>${item.name}</td>
+                <td>${item.quantity}</td>
+                <td>$${item.price.toFixed(2)}</td>
+                <td>$${lineTotal.toFixed(2)}</td>
+                <td><button onclick="deleteItem(${index})" class="danger">Delete</button></td>
+            </tr>
         `;
-        table.appendChild(row);
     });
 
     document.getElementById("totalItems").textContent = inventory.length;
@@ -71,16 +67,9 @@ function renderItems() {
 }
 
 function deleteItem(index) {
-    const table = document.getElementById("inventoryTable");
-    const row = table.children[index];
-
-    row.classList.add("fade-out");
-
-    setTimeout(() => {
-        inventory.splice(index, 1);
-        saveItems();
-        renderItems();
-    }, 300);
+    inventory.splice(index, 1);
+    saveItems();
+    renderItems();
 }
 
 function clearInventory() {
@@ -117,18 +106,9 @@ function updateChart() {
             }]
         },
         options: {
-            responsive: true,
-            animation: {
-                duration: 1000,
-                easing: 'easeOutQuart'
-            },
-            plugins: {
-                legend: { display: true }
-            }
+            responsive: true
         }
     });
 }
 
-
 document.addEventListener("DOMContentLoaded", renderItems);
-
